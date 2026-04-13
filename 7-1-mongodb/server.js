@@ -117,6 +117,7 @@
  *  - write your database username in place of HasanDB in the connection string.
  *  - write your database password in place of <db_password> in the connection string.
  *  - Run server: node server.js to test connection.
+ *
  * 
  * =====================================================
  * TODO-2 Define the schema of the DB
@@ -185,6 +186,70 @@
  */
 
 // import mongoose
+//TODO 1
+import mongoose from "mongoose";
+
+const uri = "mongodb+srv://s202257820_db_user:xUswh868a7GOKvyt@cluster0.ibjj5ka.mongodb.net/TestDB";
+
+mongoose.connect(uri)
+    .then(() => console.log("✅ Connected"))
+    .catch(err => console.log(err));
+
+//TODO 2
+const studentSchema = new mongoose.Schema({
+    name: String,
+    age: Number,
+    major: String
+});
+
+const Student = mongoose.model("Student", studentSchema);
+
+//TODO 3
+async function createStudents() {
+    await Student.insertMany([
+        { name: "Ali", age: 21, major: "CS" },
+        { name: "Sara", age: 23, major: "SE" }
+    ]);
+    console.log("✅ Inserted");
+}
+
+//TODO 4
+async function readStudents() {
+    const all = await Student.find();
+    console.log(all);
+}
+
+//TODO 5
+async function updateStudent() {
+    await Student.updateOne({ name: "Ali" }, { age: 22 });
+    console.log("✅ Updated Ali");
+}
+
+//TODO 6
+async function deleteStudent() {
+    await Student.deleteOne({ name: "Sara" });
+    console.log("✅ Deleted Sara");
+}
+async function main() {
+    try {
+        await createStudents();
+        await readStudents();
+        await updateStudent();
+        await deleteStudent();
+        await readStudents();
+
+        await mongoose.disconnect();
+    } catch (err) {
+        console.log("❌ Error:", err);
+    }
+}
+main();
+
+
+
+
+
+
 
 // establish connection
 
